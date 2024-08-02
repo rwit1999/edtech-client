@@ -5,7 +5,7 @@ import { userLoggedIn } from "../auth/authSlice";
 export const apiSlice = createApi({
     reducerPath:"api",
     baseQuery:fetchBaseQuery({
-        baseUrl:'http://localhost:8000/api/v1/',
+        baseUrl:'https://edtech-server-xyy4.onrender.com/api/v1/',
         credentials:"include"
     }),
     endpoints:(builder)=>({
