@@ -8,15 +8,6 @@ type Props = {}
 const Page = (props: Props) => {
 
   const [isLoading, setIsLoading] = useState(true); // Loading state
-
-  // useEffect(() => {
-  //   // Simulate a delay for demonstration (replace with actual fetch or data loading logic)
-  //   const timer = setTimeout(() => {
-  //     setIsLoading(false); // Set loading to false after timeout
-  //   },500); // Adjust timeout as per your needs or remove if not needed
-
-  //   return () => clearTimeout(timer); // Cleanup timer on unmount or dependency change
-  // }, []);
   
   return (
     <div>

@@ -1,18 +1,18 @@
-'use client'
-import { useGetCoursesQuery } from "@/redux/features/courses/coursesApi"
-import { useSearchParams } from "next/navigation"
-import React, { useEffect, useState } from "react"
-import Loader from "../components/Loader/Loader"
-import { Header } from "../components/Header"
-import Courses from "../components/Course/Courses"
-import CourseCard from "../components/Course/CourseCard"
+'use client';
+import { useGetCoursesQuery } from "@/redux/features/courses/coursesApi";
+import { useSearchParams } from "next/navigation";
+import React, { useEffect, useState, Suspense } from "react";
+import Loader from "../components/Loader/Loader";
+import { Header } from "../components/Header";
+import Courses from "../components/Course/Courses";
+import CourseCard from "../components/Course/CourseCard";
 
-type Props = {}
+type Props = {};
 
 const Page = (props: Props) => {
-    const searchParams = useSearchParams()
-    const search = searchParams?.get('title')
-    const { data, isLoading } = useGetCoursesQuery({})
+    const searchParams = useSearchParams();
+    const search = searchParams?.get('title');
+    const { data, isLoading, error } = useGetCoursesQuery({});
     const categories = [
         "Algorithms and Data Structures",
         "Artificial Intelligence",
@@ -22,23 +22,26 @@ const Page = (props: Props) => {
         "Web Development",
         "Mobile Development",
         "Cybersecurity"
-    ]
-    const [route, setRoute] = useState("Login")
-    const [open, setOpen] = useState(false)
-    const [courses, setCourses] = useState([])
-    const [category, setCategory] = useState("All")
+    ];
+    const [route, setRoute] = useState("Login");
+    const [open, setOpen] = useState(false);
+    const [courses, setCourses] = useState<any[]>([]);
+    const [category, setCategory] = useState("All");
 
     useEffect(() => {
-        if (category === 'All') {
-            setCourses(data?.courses)
+        if (data?.courses) {
+            if (category === 'All') {
+                setCourses(data.courses);
+            } else {
+                setCourses(data.courses.filter((item: any) => item.categories === category));
+            }
+            if (search) {
+                setCourses(data.courses.filter((item: any) => item.name.toLowerCase().includes(search.toLowerCase())));
+            }
         }
-        if (category !== 'All') {
-            setCourses(data?.courses.filter((item: any) => item.categories === category))
-        }
-        if (search) {
-            setCourses(data?.courses.filter((item: any) => item.name.toLowerCase().includes(search.toLowerCase())))
-        }
-    }, [data, category, search])
+    }, [data, category, search]);
+
+    if (error) return <div>Error fetching courses</div>;
 
     return (
         <div className="min-h-screen bg-gray-100">
@@ -61,7 +64,7 @@ const Page = (props: Props) => {
                             >
                                 All
                             </div>
-                            {categories && categories.map((item: any, index: number) => (
+                            {categories.map((item, index) => (
                                 <div key={index} className="mt-2">
                                     <div
                                         onClick={() => setCategory(item)}
@@ -72,14 +75,14 @@ const Page = (props: Props) => {
                                 </div>
                             ))}
                         </div>
-                        {courses && courses.length === 0 && (
+                        {courses.length === 0 && (
                             <p className="text-center text-gray-500">
                                 {search ? "No courses found" : "No courses found in this category. Please try another one"}
                             </p>
                         )}
                         <br />
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
-                            {courses && courses.map((item, index) => (
+                            {courses.map((item, index) => (
                                 <CourseCard key={index} item={item} />
                             ))}
                         </div>
@@ -87,7 +90,14 @@ const Page = (props: Props) => {
                 </>
             )}
         </div>
-    )
-}
+    );
+};
 
-export default Page
+// Wrap the Page component with Suspense if needed
+const PageWrapper = (props: Props) => (
+    <Suspense fallback={<div>Loading...</div>}>
+        <Page {...props} />
+    </Suspense>
+);
+
+export default PageWrapper;

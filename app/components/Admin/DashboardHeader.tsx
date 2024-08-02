@@ -1,3 +1,4 @@
+'use client'
 import { ThemeSwitcher } from '@/app/utils/ThemeSwitcher';
 import { useGetAllNotificationsQuery, useUpdateNotificationStatusMutation } from '@/redux/features/notifications/notificationApi';
 
@@ -18,11 +19,7 @@ const DashboardHeader= () => {
   const { data, refetch } = useGetAllNotificationsQuery(undefined, { refetchOnMountOrArgChange: true });
   const [updateNotificationStatus, { isSuccess }] = useUpdateNotificationStatusMutation();
   const [notifications, setNotifications] = useState<any>([]);
-  const [audio] = useState(new Audio('https://res.cloudinary.com/dqpkddodw/video/upload/v1721114929/notification_sound_ay6sic.mp3'));
-
-  const playNotificationSound = () => {
-    audio.play();
-  };
+  
 
   useEffect(() => {
     if (data) {
@@ -31,13 +28,13 @@ const DashboardHeader= () => {
     if (isSuccess) {
       refetch();
     }
-    audio.load();
+    
   }, [data, isSuccess]);
 
   useEffect(() => {
     socketId.on('newNotification', (data) => {
       refetch();
-      playNotificationSound();
+      
     });
   }, []);
 
