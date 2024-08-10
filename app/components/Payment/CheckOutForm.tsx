@@ -45,14 +45,14 @@ const CheckOutForm: FC<Props> = ({ setOpen, data, user }) => {
   useEffect(() => {
     if (orderData) {
       setLoadUser(true);
-      redirect(`/course-access/${data._id}`)
-
-      // socketId.emit('notification', {
-      //   title: 'New Order',
-      //   message: `You have a new order from ${data.course.name}`,
-      //   userId: user._id,
-      // });
       
+      socketId.emit('notification', {
+        title: 'New Order',
+        message: `You have a new order from ${data.course.name}`,
+        userId: user._id,
+      });
+      
+      redirect(`/course-access/${data._id}`)
     }
     if (error) {
       if ('data' in error) {
