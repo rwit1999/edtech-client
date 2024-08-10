@@ -3,7 +3,7 @@ module.exports = {
     images: {
         domains: ['res.cloudinary.com','randomuser.me'],
     },
-    experimental:{
+    experimental:{ 
         reactRoot:true,
         suppressHydrationWarning:true
     }

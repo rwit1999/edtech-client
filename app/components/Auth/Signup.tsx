@@ -5,6 +5,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible, AiFillGithub } from 'react-icons/a
 import { FcGoogle } from 'react-icons/fc';
 import { useRegisterMutation } from '@/redux/features/auth/authApi';
 import toast from 'react-hot-toast';
+import { signIn } from 'next-auth/react';
 
 type Props = {
     setRoute: (route: string) => void;
@@ -125,7 +126,7 @@ const Signup: FC<Props> = ({ setRoute }) => {
                     <div className="text-center">
                         <h5 className="text-gray-700 dark:text-gray-300">Or join with</h5>
                         <div className="flex justify-center space-x-4 mt-2">
-                            <FcGoogle size={30} className="cursor-pointer" />
+                            <FcGoogle size={30} className="cursor-pointer" onClick={()=>signIn("google")}/>
                             <AiFillGithub size={30} className="cursor-pointer" />
                         </div>
                     </div>
