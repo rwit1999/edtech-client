@@ -4,6 +4,8 @@ import { useCreateOrderMutation } from '@/redux/features/orders/orderApi';
 import { useLoadUserQuery } from '@/redux/features/api/apiSlice';
 import toast from 'react-hot-toast';
 import socketIO from 'socket.io-client';
+import { redirect } from 'next/navigation';
+
 
 const ENDPOINT = process.env.NEXT_PUBLIC_SOCKET_SERVER_URI || '';
 const socketId = socketIO(ENDPOINT, { transports: ['websocket'] });
@@ -36,20 +38,20 @@ const CheckOutForm: FC<Props> = ({ setOpen, data, user }) => {
     } else if (paymentIntent && paymentIntent.status === 'succeeded') {
       setMessage('Payment Successful');
       setIsLoading(false);
-      await createOrder({ courseId: data._id, payment_info: paymentIntent });
-      window.location.reload(); // Reload the page after successful payment
+      createOrder({ courseId: data._id, payment_info: paymentIntent });
     }
   };
 
   useEffect(() => {
     if (orderData) {
       setLoadUser(true);
+      redirect(`/course-access/${data._id}`)
       socketId.emit('notification', {
         title: 'New Order',
         message: `You have a new order from ${data.course.name}`,
         userId: user._id,
       });
-      // Redirect to a specific route or do additional actions if needed
+      
     }
     if (error) {
       if ('data' in error) {
