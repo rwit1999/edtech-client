@@ -6,7 +6,6 @@ import toast from 'react-hot-toast';
 import socketIO from 'socket.io-client';
 import { redirect } from 'next/navigation';
 
-
 const ENDPOINT = process.env.NEXT_PUBLIC_SOCKET_SERVER_URI || '';
 const socketId = socketIO(ENDPOINT, { transports: ['websocket'] });
 
@@ -45,14 +44,13 @@ const CheckOutForm: FC<Props> = ({ setOpen, data, user }) => {
   useEffect(() => {
     if (orderData) {
       setLoadUser(true);
-      
-      socketId.emit('notification', {
-        title: 'New Order',
-        message: `You have a new order from ${data.course.name}`,
-        userId: user._id,
-      });
-      
+      // socketId.emit('notification', {
+      //   title: 'New Order',
+      //   message: `You have a new order from ${data.course.name}`,
+      //   userId: user._id,
+      // });
       redirect(`/course-access/${data._id}`)
+      // Redirect to a specific route or do additional actions if needed
     }
     if (error) {
       if ('data' in error) {
@@ -60,7 +58,7 @@ const CheckOutForm: FC<Props> = ({ setOpen, data, user }) => {
         toast.error(errorMessage.data.message);
       }
     }
-  }, [orderData, error, data, user._id]);
+  }, [orderData, error, data]);
 
   return (
     <form
@@ -69,7 +67,7 @@ const CheckOutForm: FC<Props> = ({ setOpen, data, user }) => {
       className="max-w-md mx-auto mt-6 p-4 border rounded-lg shadow-lg bg-white"
     >
       <div className="mb-4">
-        {/* <LinkAuthenticationElement id="link-authentication-element" />  */}
+        <LinkAuthenticationElement id="link-authentication-element"/> 
         <PaymentElement id="payment-element" className="border rounded p-2" />
       </div>
       <button
