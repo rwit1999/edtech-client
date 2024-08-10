@@ -67,7 +67,7 @@ const CheckOutForm: FC<Props> = ({ setOpen, data, user }) => {
       className="max-w-md mx-auto mt-6 p-4 border rounded-lg shadow-lg bg-white"
     >
       <div className="mb-4">
-        <LinkAuthenticationElement id="link-authentication-element"/> 
+        <LinkAuthenticationElement id="link-authentication-element" className='hidden'/> 
         <PaymentElement id="payment-element" className="border rounded p-2" />
       </div>
       <button
